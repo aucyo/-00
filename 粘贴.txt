@@ -1,0 +1,33 @@
+≤‹”Ó¿ÓÊ⁄Íª
+ifconfig eth0 192.168.1.100
+mount -o nolock,rsize=4096,wsize=4096 192.168.1.100:/arm2410cl /mnt/nfs
+cd /mnt/nfs 
+insmod s3c2410-da.ko
+mknod /dev/da c 252 0
+insmod s3c2410-led.ko
+cd /root
+insmod led.ko
+mknod /dev/leds c 251 0
+
+cd /mnt/nfs/Trolltech/qt-embedded-4.4.0
+export QTDIR=$PWD
+export LD_LIBRARY_PATH=$PWD/lib
+export TSLIB_TSDEVICE=/dev/event0
+export TSLIB_PLUGINDIR=$PWD/lib/ts
+export TSLIB_CONSOLEDEVICE=none
+export TSLIB_CONFFILE=$PWD/etc/ts.conf
+export POINTERCAL_FILE=$PWD/etc/ts-calib.conf
+export QWS_MOUSE_PROTO=tslib:/dev/event0
+export TSLIB_CALIBFILE=$PWD/etc/ts-calib.conf
+export QT_QWS_FONTDIR=$PWD/lib/fonts
+export QWS_DISPLAY=LinuxFB:mmWidth160:mmHeight120:0
+export QWS_SIZE="640x480"
+export LANG=zh_CN
+
+cd /home/sprife/qt4/for_arm/
+cd my/
+make clean
+/home/sprife/qt4/for_arm/qt-embedded-linux-opensource-src-4.4.0/bin/qmake -project
+/home/sprife/qt4/for_arm/qt-embedded-linux-opensource-src-4.4.0/bin/qmake
+make
+cp my /arm2410cl/Trolltech/qt-embedded-4.4.0/
